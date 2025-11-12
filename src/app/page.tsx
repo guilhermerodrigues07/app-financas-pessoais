@@ -501,15 +501,15 @@ export default function FinanceApp() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
                 <button
-                  onClick={() => handleStartApp()}
+                  onClick={() => setShowPlanSelector(true)}
                   className="bg-gradient-to-r from-emerald-500 to-blue-600 hover:from-emerald-600 hover:to-blue-700 text-white px-8 py-4 rounded-2xl font-bold text-lg flex items-center gap-3 transition-all duration-300 shadow-2xl hover:shadow-emerald-500/25 transform hover:scale-105"
                 >
                   <Rocket className="w-6 h-6" />
-                  Começar Gratuitamente
+                  Começar Agora
                 </button>
                 <div className="flex items-center gap-2 text-gray-300">
                   <Shield className="w-5 h-5 text-emerald-400" />
-                  <span>100% Seguro e Gratuito</span>
+                  <span>100% Seguro</span>
                 </div>
               </div>
 
@@ -744,11 +744,11 @@ export default function FinanceApp() {
               Junte-se a milhares de pessoas que já revolucionaram sua vida financeira
             </p>
             <button
-              onClick={() => handleStartApp()}
+              onClick={() => setShowPlanSelector(true)}
               className="bg-gradient-to-r from-emerald-500 to-blue-600 hover:from-emerald-600 hover:to-blue-700 text-white px-12 py-4 rounded-2xl font-bold text-xl flex items-center gap-3 mx-auto transition-all duration-300 shadow-2xl hover:shadow-emerald-500/25 transform hover:scale-105"
             >
               <Award className="w-6 h-6" />
-              Começar Agora - É Grátis!
+              Começar Agora
             </button>
           </div>
         </div>
@@ -776,6 +776,63 @@ export default function FinanceApp() {
             </div>
           </div>
         </footer>
+
+        {/* Modal Seletor de Planos na Landing */}
+        {showPlanSelector && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  Escolha seu Plano
+                </h3>
+                <button
+                  onClick={() => setShowPlanSelector(false)}
+                  className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {Object.entries(PLAN_FEATURES).map(([planKey, plan]) => (
+                  <div
+                    key={planKey}
+                    className={`rounded-2xl p-6 border-2 transition-all duration-300 border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700`}
+                  >
+                    <div className="text-center mb-6">
+                      <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                        {plan.name}
+                      </h4>
+                      <div className={`text-3xl font-bold text-${plan.color}-600 mb-2`}>
+                        {plan.price}
+                      </div>
+                      <p className="text-gray-600 dark:text-gray-400">por mês</p>
+                    </div>
+
+                    <ul className="space-y-3 mb-6">
+                      {plan.features.map((feature, index) => (
+                        <li key={index} className="flex items-center gap-3 text-gray-700 dark:text-gray-300">
+                          <CheckCircle className={`w-5 h-5 text-${plan.color}-600`} />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <button
+                      onClick={() => {
+                        setSelectedPlan(planKey as PlanType)
+                        handleStartApp(planKey as PlanType)
+                      }}
+                      className={`w-full py-3 rounded-xl font-semibold transition-all duration-300 bg-gradient-to-r from-${plan.color}-500 to-${plan.color}-600 hover:from-${plan.color}-600 hover:to-${plan.color}-700 text-white`}
+                    >
+                      Selecionar Plano
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     )
   }
